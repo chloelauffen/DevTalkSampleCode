@@ -10,117 +10,137 @@ namespace TestProject
     {
         static void Main(string[] args)
         {
-            TupleEqualityComparisons();
+            // call methods below to test them out with the debugger!  :)
         }
 
         /*
-         *  C#7.3
+         * C#6
          * */
 
-        public static void TupleEqualityComparisons()
+        // Example of String Interpolation w/ Date Formatting
+        public static void StringInterpolationAndDateFormattingExample()
         {
+            string name = "Chloe";
+            DateTime dob = new DateTime(1993, 1, 25);
 
-            string str1 = null;
-
-            // string? str2 = null;
-
-
-            Console.WriteLine(str1);
-
-            var lunch = (3, "tacos");
-            var dinner = (3, "tacos");
-
-            bool isSameMeal = lunch == dinner;
-            // true
-
-
-            //var lunch = (5, "burritos");
-            //var dinner = (3, "tacos");
-
-            //bool isSameMeal = lunch == dinner;
-            //// false
-
-
-
-
-            var tuple = (5, "Orange");
-
-            var count2 = 5;
-            var type2 = "Yellow";
-            var tuple2 = (count2, type2);
-
-            bool isSame = tuple == tuple2;
-
-            tuple2.type2 = "Orange";
-
-            isSame = tuple == tuple2;
+            var message = $"{name} was born on {dob: MMM dd, yyyy}";
+            // Chloe was born on  Jan 25, 1993
         }
 
-        /*
-         *  C#7.1
-         * */
-
-        public static void DefaultLiteralsExample()
+        // Example of Null-Conditional Operator 1
+        public static void NullPropagationOperatorExample1()
         {
-
-
-
-
-            string myStr = default;     // null
-            int myInt = default;        // 0
-
-
-            Console.WriteLine(myStr);
-            Console.WriteLine(myInt);
+            List<string> list = null;
+            string firstItem = list?[0]?.ToLower();
         }
 
-        public static void TupleNameInferenceExample()
+        // Example of Null-Conditional Operator 2
+        public static void NullPropagationOperatorExample2()
         {
+            var person = new Person();
+            string firstNumber;
 
+            // NULL example
+            // this block of code
+            if (person != null && person.PhoneNumbers != null && person.PhoneNumbers[0] != null)
+            {
+                firstNumber = person.PhoneNumbers[0];
+            }
+            else
+            {
+                firstNumber = "alternative";
+            }
+            // is equivalent to this line of code
+            firstNumber = person?.PhoneNumbers?[0] ?? "alternative";
 
+            // 'firstNumber' now has value "alternative"
 
+            // NOT NULL example
+            person.PhoneNumbers = new List<string>() { "123456789" };
+            // this block of code
+            if (person != null && person.PhoneNumbers != null && person.PhoneNumbers[0] != null)
+            {
+                firstNumber = person.PhoneNumbers[0];
+            }
+            else
+            {
+                firstNumber = "alternative";
+            }
+            // is equivalent to this line of code
+            firstNumber = person?.PhoneNumbers?[0] ?? "alternative";
+
+            // 'firstNumber' now has value "123456789"
+        }
+
+        // Example of nameOf Keyword
+        public static void NameOfExample()
+        {
             string food = "burritos";
-            int amount = 5;
+            string myVar = nameof(food);
+            // myVar has value "food"
+        }
 
-            var lunch = (amount, food);
+        // Example of Exception Filters
+        public static void ExceptionFilterExample()
+        {
+            // using Exception Filters
+            try
+            {
+                ThrowException();
+            }
+            catch (Exception ex) when (ex.Message == "Other Exception")
+            {
+            }
+            catch (Exception ex) when (ex.Message == "My Exception")
+            {
+            }
 
-            string message = $"Lunch was {lunch.amount} cool {lunch.food}";
-            // Lunch was 5 cool burritos
+            // similar intent without using Exception Filters
+            try
+            {
+                ThrowException();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Other Exception")
+                {
+                }
+                else if (ex.Message == "My Exception")
+                {
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
 
-
-
-            // need to install System.ValueTuple
-            var count = 5;
-            var type = "Orange";
-
-            var tuple = (count, type);
-
-            Console.WriteLine($"count: {tuple.count}; type: {tuple.type}");
+        public static void ThrowException()
+        {
+            throw new Exception("My Exception");
         }
 
         /*
          * C#7
          *
         */
+
+        // Example of Tuple Deconstruction
         public static void TupleDeconstructionExample()
         {
             var person = new Person();
 
             (string, string, DateTime) myTuple = person.GetInfo();
+            // myTuple.Item1;
+            // myTuple.Item2;
+            // myTuple.Item3;
 
-            var (first, last, date) = person.GetInfo();
-            (string first2, string last2, DateTime date2) = person.GetInfo();
+            var (lunch, dinner, dinnerTime) = person.GetInfo();
+
+            (string breakfast, string snack, DateTime snackTime) = person.GetInfo();
         }
 
-        public static void SwitchStatementPatternMatchingExample()
-        {
-            SwitchStatementPatternMatchingExample("string");
-            SwitchStatementPatternMatchingExample(500);
-            SwitchStatementPatternMatchingExample(100);
-            SwitchStatementPatternMatchingExample(new List<string>() { "value1", "value2" });
-            SwitchStatementPatternMatchingExample(new Person());
-        }
-
+        // Example of Switch Statement Pattern Matching
         public static void SwitchStatementPatternMatchingExample(object myParam)
         {
             object myObject = "hello";
@@ -153,122 +173,64 @@ namespace TestProject
             }
         }
 
+        public static void SwitchStatementPatternMatchingExample()
+        {
+            SwitchStatementPatternMatchingExample("string");
+            SwitchStatementPatternMatchingExample(500);
+            SwitchStatementPatternMatchingExample(100);
+            SwitchStatementPatternMatchingExample(new List<string>() { "value1", "value2" });
+            SwitchStatementPatternMatchingExample(new Person());
+        }
+
         /*
-         * C#6
+         *  C#7.1
          * */
-        public static void StringInterpolationAndDateFormattingExample()
+
+        // Example of Default Literals
+        public static void DefaultLiteralsExample()
         {
-            // Example of string interpolation
-            // Example of Date Formatting
-
-            string name = "Chloe";
-            DateTime dob = new DateTime(1993, 1, 25);
-
-            var message = $"{name} was born on {dob: MMM dd, yyyy}";
-            // Chloe was born on  Jan 25, 1993
-
-
-
-            //var person = new Person() { DateOfBirth = new DateTime(1993, 1, 25) };
-            //var message = $"Person {person.FirstName} {person.LastName} was born on {person.DateOfBirth: MMM dd, yyyy}";
+            string myStr = default;     // null
+            int myInt = default;        // 0
         }
 
-        public static void NullPropagationOperatorExample()
+        // Example of Inferred Tuple Element Names
+        // need to install System.ValueTuple
+        public static void TupleNameInferenceExample()
         {
-            List<string> list = null;
+            // explicit element names
+            var count = 5;
+            var type = "Orange";
 
-            string firstItem = list?[0]?.ToLower();
+            var tuple = (count: count, type: type);
 
-
-
-            // null-conditional and null-coalescing
-            // Example of null propagation operator
-            var person = new Person();
-            string firstNumber;
-
-            // NULL example
-            if (person != null && person.PhoneNumbers != null && person.PhoneNumbers[0] != null)
-            {
-                firstNumber = person.PhoneNumbers[0];
-            }
-            else
-            {
-                firstNumber = "alternative";
-            }
-
-            // VS
-            firstNumber = person?.PhoneNumbers?[0] ?? "alternative";
-
-            // NOT NULL example
-            person.PhoneNumbers = new List<string>() { "123456789" };
-            if (person != null && person.PhoneNumbers != null && person.PhoneNumbers[0] != null)
-            {
-                firstNumber = person.PhoneNumbers[0];
-            }
-            else
-            {
-                firstNumber = "alternative";
-            }
-            // VS
-            firstNumber = person?.PhoneNumbers?[0] ?? "alternative";
-        }
-
-        public static void NameOfExample()
-        {
-            // Example of "nameOf" feature
-
+            // inferred element names
             string food = "burritos";
-            string myVar = nameof(food);
-            // myVar has value "food"
+            int amount = 5;
 
-            Console.WriteLine(myVar);
+            var lunch = (amount, food);
+
+            string message = $"Lunch was {lunch.amount} cool {lunch.food}";
+            // Lunch was 5 cool burritos
         }
 
-        public static void GetterOnlyPropertyExample()
-        {
-            // Example of getter only property
-            var person = new Person
-            {
-                FirstName = "NewFirstName",
-                //LastName = "NewLastName"
-            };
-        }
+        /*
+         *  C#7.3
+         * */
 
-        public static void ExceptionFilterExample()
+        // Example of Tuple Equality Comparison
+        public static void TupleEqualityComparisons()
         {
-            try
-            {
-                ThrowException();
-            }
-            catch (Exception ex) when (ex.Message == "Other Exception")
-            {
-            }
-            catch (Exception ex) when (ex.Message == "My Exception")
-            {
-            }
+            var lunch = (3, "tacos");
+            var dinner = (3, "tacos");
 
-            try
-            {
-                ThrowException();
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message == "Other Exception")
-                {
-                }
-                else if (ex.Message == "My Exception")
-                {
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
+            bool isSameMeal = lunch == dinner;
+            // true
 
-        public static void ThrowException()
-        {
-            throw new Exception("My Exception");
+            var lunch2 = (5, "burritos");
+            var dinner2 = (3, "tacos");
+
+            bool isSameMeal2 = lunch2 == dinner2;
+            // false
         }
     }
 }
