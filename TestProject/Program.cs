@@ -10,50 +10,144 @@ namespace TestProject
     {
         static void Main(string[] args)
         {
-            SwitchStatementPatternMatchingExample();
+            TupleEqualityComparisons();
         }
 
         /*
-         * C#7 & C#7.1
+         *  C#7.3
          * */
 
+        public static void TupleEqualityComparisons()
+        {
 
+            string str1 = null;
+
+            // string? str2 = null;
+
+
+            Console.WriteLine(str1);
+
+            var lunch = (3, "tacos");
+            var dinner = (3, "tacos");
+
+            bool isSameMeal = lunch == dinner;
+            // true
+
+
+            //var lunch = (5, "burritos");
+            //var dinner = (3, "tacos");
+
+            //bool isSameMeal = lunch == dinner;
+            //// false
+
+
+
+
+            var tuple = (5, "Orange");
+
+            var count2 = 5;
+            var type2 = "Yellow";
+            var tuple2 = (count2, type2);
+
+            bool isSame = tuple == tuple2;
+
+            tuple2.type2 = "Orange";
+
+            isSame = tuple == tuple2;
+        }
+
+        /*
+         *  C#7.1
+         * */
+
+        public static void DefaultLiteralsExample()
+        {
+
+
+
+
+            string myStr = default;     // null
+            int myInt = default;        // 0
+
+
+            Console.WriteLine(myStr);
+            Console.WriteLine(myInt);
+        }
+
+        public static void TupleNameInferenceExample()
+        {
+
+
+
+            string food = "burritos";
+            int amount = 5;
+
+            var lunch = (amount, food);
+
+            string message = $"Lunch was {lunch.amount} cool {lunch.food}";
+            // Lunch was 5 cool burritos
+
+
+
+            // need to install System.ValueTuple
+            var count = 5;
+            var type = "Orange";
+
+            var tuple = (count, type);
+
+            Console.WriteLine($"count: {tuple.count}; type: {tuple.type}");
+        }
+
+        /*
+         * C#7
+         *
+        */
+        public static void TupleDeconstructionExample()
+        {
+            var person = new Person();
+
+            (string, string, DateTime) myTuple = person.GetInfo();
+
+            var (first, last, date) = person.GetInfo();
+            (string first2, string last2, DateTime date2) = person.GetInfo();
+        }
 
         public static void SwitchStatementPatternMatchingExample()
         {
-            Match("string");
-            Match(500);
-            Match(100);
-            Match(new List<string>() { "value1", "value2" });
-            Match(new Person());
+            SwitchStatementPatternMatchingExample("string");
+            SwitchStatementPatternMatchingExample(500);
+            SwitchStatementPatternMatchingExample(100);
+            SwitchStatementPatternMatchingExample(new List<string>() { "value1", "value2" });
+            SwitchStatementPatternMatchingExample(new Person());
         }
-        public static void Match(object myVar)
+
+        public static void SwitchStatementPatternMatchingExample(object myParam)
         {
-            switch (myVar)
+            object myObject = "hello";
+            // object myObject = 10;
+            // object myObject = 500;
+            // object myObject = new List<string>();
+            // object myObject = new Person();
+            switch (myObject)
             {
-                case string str:
+                case string myStr:
                     {
-                        Console.WriteLine($"we assigned the value to str {str}");
                         break;
                     }
-                case int i when i <= 100:
+                case int myInt when myInt <= 100:
                     {
-                        Console.WriteLine($"{i} is an int and less than or equal to 100");
                         break;
                     }
-                case int i:
+                case int myInt:
                     {
-                        Console.WriteLine($"{i} is an int and is greater than 100");
                         break;
                     }
-                case IEnumerable<object> list when list.Any():
+                case IEnumerable<object> myEnumerable when myEnumerable.Any():
                     {
-                        Console.WriteLine($"we assigned the value to list {string.Join(", ", list)}");
                         break;
                     }
-                case Person p when (p.FirstName == "Chloe"):
+                case Person myPerson when (myPerson.FirstName == "Chloe"):
                     {
-                        Console.WriteLine($"we assigned the value to p {p.FirstName}");
                         break;
                     }
             }
@@ -66,12 +160,27 @@ namespace TestProject
         {
             // Example of string interpolation
             // Example of Date Formatting
-            var person = new Person() { DateOfBirth = new DateTime(1993, 1, 25) };
-            var message = $"Person {person.FirstName} {person.LastName} was born on {person.DateOfBirth: MMM dd, yyyy}";
+
+            string name = "Chloe";
+            DateTime dob = new DateTime(1993, 1, 25);
+
+            var message = $"{name} was born on {dob: MMM dd, yyyy}";
+            // Chloe was born on  Jan 25, 1993
+
+
+
+            //var person = new Person() { DateOfBirth = new DateTime(1993, 1, 25) };
+            //var message = $"Person {person.FirstName} {person.LastName} was born on {person.DateOfBirth: MMM dd, yyyy}";
         }
 
         public static void NullPropagationOperatorExample()
         {
+            List<string> list = null;
+
+            string firstItem = list?[0]?.ToLower();
+
+
+
             // null-conditional and null-coalescing
             // Example of null propagation operator
             var person = new Person();
@@ -107,9 +216,12 @@ namespace TestProject
         public static void NameOfExample()
         {
             // Example of "nameOf" feature
-            var variableName = "string value";
-            var test = nameof(variableName);
-            Console.WriteLine(test);
+
+            string food = "burritos";
+            string myVar = nameof(food);
+            // myVar has value "food"
+
+            Console.WriteLine(myVar);
         }
 
         public static void GetterOnlyPropertyExample()
@@ -124,42 +236,39 @@ namespace TestProject
 
         public static void ExceptionFilterExample()
         {
-            // Example of exception filters
-            // only enters the catch block if matches the filter
             try
             {
-                throw new Exception("My Exception");
+                ThrowException();
             }
             catch (Exception ex) when (ex.Message == "Other Exception")
             {
-                Console.WriteLine("Other Exception occurred");
             }
             catch (Exception ex) when (ex.Message == "My Exception")
             {
-                Console.WriteLine("My Exception occurred");
             }
-            // VS
-            // will always enter the catch block and can be rethrown
+
             try
             {
-                throw new Exception("My Exception");
+                ThrowException();
             }
             catch (Exception ex)
             {
                 if (ex.Message == "Other Exception")
                 {
-                    Console.WriteLine("Other Exception occurred");
                 }
                 else if (ex.Message == "My Exception")
                 {
-                    Console.WriteLine("My Exception occurred");
                 }
                 else
                 {
                     throw;
                 }
             }
-            //https://www.thomaslevesque.com/2015/06/21/exception-filters-in-c-6/
+        }
+
+        public static void ThrowException()
+        {
+            throw new Exception("My Exception");
         }
     }
 }
